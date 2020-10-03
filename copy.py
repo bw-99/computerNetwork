@@ -1,6 +1,6 @@
 import threading
 import time
-import sys
+
 class copy_machine:
 
     def __init__(self,infile,outfile):
@@ -8,8 +8,8 @@ class copy_machine:
         self._outfile=outfile
     
     def make_thread(self):
-        setattr(mod,self._infile,threading.Thread(target=self.copy))
-        getattr(mod,self._infile).start()
+        thread=threading.Thread(target=self.copy)
+        thread.start()
 
     def copy(self):
         f=open(self._infile,'rb')
@@ -35,17 +35,17 @@ class copy_machine:
         p.write(text)
         p.close()
 
-start=time.time()
-mod=sys.modules[__name__]
 
-i=1
+start=time.time()
+
 if __name__ == "__main__":
+    p=open('log.txt','w')
+    p.close()
     while(True):
         input_file=input("Input the file name : ")
         if(input_file=='exit'):
             break
         output_file=input("Input the new name : ")
         
-        setattr(mod,'thread_{}'.format(i),copy_machine(input_file,output_file))
-        getattr(mod,'thread_{}'.format(i)).make_thread()
-        i+=1
+        copy=copy_machine(input_file,output_file)
+        copy.make_thread()
